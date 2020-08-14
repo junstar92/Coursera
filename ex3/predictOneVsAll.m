@@ -30,9 +30,9 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
-gx = sigmoid(X * all_theta');
+g_h = sigmoid(X * all_theta');
 
-[max_pobability_one_example, class_in_one_example] = max(gx, [], 2);  
+[max_pobability_one_example, class_in_one_example] = max(g_h, [], 2);  
 p = class_in_one_example;
 
 

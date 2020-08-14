@@ -19,8 +19,8 @@ grad = zeros(size(theta));
 tempTheta = theta;
 tempTheta(1) = 0;
 
-J = (-1/m) * sum(y.*log(sigmoid(X*theta))+(1-y).*log(1-sigmoid(X*theta)));
-J = J + ((lambda)/(2*m))*(sum(tempTheta.^2));
+J = (-1/m) * sum(y.*log(sigmoid(X*theta))+(1-y).*log(1-sigmoid(X*theta))) ...
+        + ((lambda)/(2*m))*(tempTheta'*tempTheta);
 
 temp = sigmoid(X*theta);
 error = temp - y;

@@ -35,16 +35,15 @@ grad = zeros(size(theta));
 %           temp(1) = 0;   % because we don't add anything for j = 0  
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
-h_thetaX = sigmoid(X*theta);
+tempTheta = theta;
+tempTheta(1) = 0;
 
-pos = -y'*log(h_thetaX);
-neg = -(1-y)'*log(1-h_thetaX);
-regularization = lambda/(2*m)*sum(theta(2:end).^2);
+J = (-1/m) * sum(y.*log(sigmoid(X*theta))+(1-y).*log(1-sigmoid(X*theta))) ...
+        + ((lambda)/(2*m))*(tempTheta'*tempTheta);
 
-J = (1 / m)*(pos + neg) + regularization;
-
-grad = (1/m)*X'*(h_thetaX - y) + (lambda/m).*theta;
-grad(1) = (1/m)*X(:,1)'*(h_thetaX - y);
+temp = sigmoid(X*theta);
+error = temp - y;
+grad = (1/m) * (X' * error) +(lambda/m)*tempTheta;
 
 % =============================================================
 
