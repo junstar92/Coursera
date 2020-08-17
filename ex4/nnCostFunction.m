@@ -62,23 +62,36 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Setting Y matrix to m(5000) x classes(10)
+Y = zeros(m, num_labels);
+for i = 1:m
+  Y(i, y(i)) = 1;
+end
 
+% ----------------- Part 1 : FP -------------------------------
+a1 = [ones(m, 1) X];                      % a1 = 5000 x 401
+z2 = a1 * Theta1';                        % a1(5000 x 401) x Theta1'(401 x 25) = z2(5000 x 25)
+a2 = zeros(m, hidden_layer_size);         
+a2 = [ones(m, 1), sigmoid(a1*Theta1')];   % a2 = 5000 x 26
+z3 = a2 * Theta2';                        % a2(5000 x 26) x Theta2'(26 x 10) = z3(5000 x 10)
+a3 = sigmoid(z3);                         % a3 = 5000 x 10
 
+% Y = 5000 x 10, a3 = 5000 x 10
+J = -(1/m)*(sum(sum(Y.*log(a3) + (1-Y).*log(1 - a3)))) ...
+      + (lambda / (2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
 
+% ----------------- Part 2, 3 : BP -----------------------------
+d3 = (a3 - Y);                 % delta3 = 5000 x 10
 
+d2 = (Theta2(:, 2:end)' * d3') .* sigmoidGradient(z2)';     % Theta2(except for column 1, 10 x 25) x delta3' = delta2(25 x 5000)
+D1 = d2 * a1;     % Delta1(25 x 401) = delta2(25 x 5000) x a1(5000 x 401)
+D2 = d3' * a2;    % Delta2(10 x 26) = delta3'(10 x 5000) x a2(5000 x 26)
 
+reg1 = lambda * [zeros(size(Theta1, 1), 1) Theta1(:,2:end)];
+reg2 = lambda * [zeros(size(Theta2, 1), 1) Theta2(:,2:end)];
 
-
-
-
-
-
-
-
-
-
-
-
+Theta1_grad = (1/m)*(D1 + reg1);  % 25 x 401
+Theta2_grad = (1/m)*(D2 + reg2);  % 10 x 26
 
 % -------------------------------------------------------------
 
