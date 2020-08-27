@@ -20,14 +20,13 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
+m = size(X, 1);
 
-
-
-
-
-
+for i = 1:m
+  length = (X(i,:) - centroids).^2;
+  [a idx(i)] = min(sum(length, 2));
+endfor
 
 % =============================================================
 
 end
-
